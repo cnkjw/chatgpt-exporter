@@ -42,5 +42,6 @@
   "Select Project": "プロジェクトを選択",
   "(no project)": "（プロジェクトなし）",
   "Export All Limit": "すべてエクスポートの上限",
-  "Export All Limit Description": "「すべてエクスポート」ダイアログで読み込む会話の最大数を設定します。"
+  "Export All Limit Description": "「すべてエクスポート」ダイアログで読み込む会話の最大数を設定します。",
+  "Select a source to load conversations": "上からプロジェクトを選択して会話を読み込んでください。"
 }

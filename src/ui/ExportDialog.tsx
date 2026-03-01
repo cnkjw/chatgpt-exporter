@@ -7,7 +7,7 @@ import { exportAllToJson, exportAllToOfficialJson } from '../exporter/json'
 import { exportAllToMarkdown } from '../exporter/markdown'
 import { RequestQueue } from '../utils/queue'
 import { CheckBox } from './CheckBox'
-import { IconCross, IconUpload } from './Icons'
+import { IconCross, IconLoading, IconUpload } from './Icons'
 import { useSettingContext } from './SettingContext'
 import type { ApiConversationItem, ApiConversationWithId, ApiProjectInfo } from '../api'
 import type { FC } from '../type'
@@ -15,7 +15,7 @@ import type { ChangeEvent } from 'preact/compat'
 
 interface ProjectSelectProps {
     projects: ApiProjectInfo[]
-    selected: ApiProjectInfo | null
+    selected: ApiProjectInfo | null | undefined
     setSelected: (selected: ApiProjectInfo | null) => void
     disabled: boolean
 }
@@ -23,19 +23,24 @@ interface ProjectSelectProps {
 const ProjectSelect: FC<ProjectSelectProps> = ({ projects, selected, setSelected, disabled }) => {
     const { t } = useTranslation()
 
+    const value = selected === undefined ? '__unselected__' : (selected?.id || '')
+
     return (
         <div className="flex items-center text-gray-600 dark:text-gray-300 flex justify-between mb-3">
             {t('Select Project')}
             <select
                 disabled={disabled}
                 className="Select"
-                value={selected?.id || ''}
+                value={value}
                 onChange={(e) => {
                     const projectId = e.currentTarget.value
                     const project = projects.find(p => p.id === projectId)
                     setSelected(project || null)
                 }}
             >
+                {selected === undefined && (
+                    <option value="__unselected__" disabled>{t('Select Project')}...</option>
+                )}
                 <option value="">{t('(no project)')}</option>
                 {projects.map(project => (
                     <option key={project.id} value={project.id}>{project.display.name}</option>
@@ -75,6 +80,12 @@ const ConversationSelect: FC<ConversationSelectProps> = ({
                         setSelected(checked ? conversations : [])
                     }}
                 />
+                {loading && conversations.length > 0 && (
+                    <span className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                        <IconLoading className="w-3 h-3" />
+                        {t('Loading')}... ({conversations.length})
+                    </span>
+                )}
             </div>
             <ul className="SelectList">
                 {loading && conversations.length === 0 && <li className="SelectItem">{t('Loading')}...</li>}
@@ -94,9 +105,6 @@ const ConversationSelect: FC<ConversationSelectProps> = ({
                         />
                     </li>
                 ))}
-                {loading && conversations.length > 0 && (
-                    <li className="SelectItem" style={{ opacity: 0.5, fontStyle: 'italic' }}>{t('Loading')}...</li>
-                )}
             </ul>
         </>
     )
@@ -129,7 +137,7 @@ const DialogContent: FC<DialogContentProps> = ({ format }) => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [processing, setProcessing] = useState(false)
-    const [selectedProject, setSelectedProject] = useState<ApiProjectInfo | null>(null)
+    const [selectedProject, setSelectedProject] = useState<ApiProjectInfo | null | undefined>(undefined)
 
     const [selected, setSelected] = useState<ApiConversationItem[]>([])
     const [exportType, setExportType] = useState(exportAllOptions[0].label)
@@ -297,10 +305,12 @@ const DialogContent: FC<DialogContentProps> = ({ format }) => {
     }, [])
 
     useEffect(() => {
+        if (selectedProject === undefined) return
+        setSelected([])
         setApiConversations([])
         setLoading(true)
         fetchAllConversations(
-            selectedProject?.id,
+            selectedProject?.id ?? null,
             exportAllLimit,
             batch => setApiConversations(prev => [...prev, ...batch]),
         )
@@ -335,14 +345,22 @@ const DialogContent: FC<DialogContentProps> = ({ format }) => {
                 </div>
             )}
             <ProjectSelect projects={projects} selected={selectedProject} setSelected={setSelectedProject} disabled={processing} />
-            <ConversationSelect
-                conversations={conversations}
-                selected={selected}
-                setSelected={setSelected}
-                disabled={processing}
-                loading={loading}
-                error={error}
-            />
+            {selectedProject === undefined
+                ? (
+                    <div className="SelectList flex items-center justify-center text-gray-400 dark:text-gray-500 text-sm">
+                        {t('Select a source to load conversations')}
+                    </div>
+                    )
+                : (
+                    <ConversationSelect
+                        conversations={conversations}
+                        selected={selected}
+                        setSelected={setSelected}
+                        disabled={processing}
+                        loading={loading}
+                        error={error}
+                    />
+                    )}
             <div className="flex mt-6" style={{ justifyContent: 'space-between' }}>
                 <select className="Select" disabled={processing} value={exportType} onChange={e => setExportType(e.currentTarget.value)}>
                     {exportAllOptions.map(({ label }) => (

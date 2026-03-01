@@ -42,5 +42,6 @@
   "Select Project": "Sélectionner un projet",
   "(no project)": "(aucun projet)",
   "Export All Limit": "Limite d'Exportation Multiple",
-  "Export All Limit Description": "Définit le nombre maximal de conversations à charger dans la boîte de dialogue 'Tout exporter'."
+  "Export All Limit Description": "Définit le nombre maximal de conversations à charger dans la boîte de dialogue 'Tout exporter'.",
+  "Select a source to load conversations": "Sélectionnez un projet ci-dessus pour charger les conversations."
 }

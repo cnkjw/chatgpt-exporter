@@ -42,5 +42,6 @@
   "Select Project": "Pilih Proyek",
   "(no project)": "(tidak ada proyek)",
   "Export All Limit": "Batas Ekspor Semua",
-  "Export All Limit Description": "Atur jumlah maksimum percakapan yang akan dimuat dalam dialog 'Ekspor Semua'."
+  "Export All Limit Description": "Atur jumlah maksimum percakapan yang akan dimuat dalam dialog 'Ekspor Semua'.",
+  "Select a source to load conversations": "Pilih proyek di atas untuk memuat percakapan."
 }
