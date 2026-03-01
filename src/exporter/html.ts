@@ -4,7 +4,7 @@ import { KEY_TIMESTAMP_24H, KEY_TIMESTAMP_ENABLED, KEY_TIMESTAMP_HTML, baseUrl }
 import i18n from '../i18n'
 import { checkIfConversationStarted, getUserAvatar } from '../page'
 import templateHtml from '../template.html?raw'
-import { downloadFile, getFileNameWithFormat } from '../utils/download'
+import { buildZipFileName, downloadFile, getFileNameWithFormat } from '../utils/download'
 import { fromMarkdown, toHtml } from '../utils/markdown'
 import { ScriptStorage } from '../utils/storage'
 import { standardizeLineBreaks } from '../utils/text'
@@ -31,7 +31,7 @@ export async function exportToHtml(fileNameFormat: string, metaList: ExportMeta[
     return true
 }
 
-export async function exportAllToHtml(fileNameFormat: string, apiConversations: ApiConversationWithId[], metaList?: ExportMeta[]) {
+export async function exportAllToHtml(fileNameFormat: string, apiConversations: ApiConversationWithId[], metaList?: ExportMeta[], projectName?: string) {
     const userAvatar = await getUserAvatar()
 
     const zip = new JSZip()
@@ -63,7 +63,7 @@ export async function exportAllToHtml(fileNameFormat: string, apiConversations: 
             level: 9,
         },
     })
-    downloadFile('chatgpt-export-html.zip', 'application/zip', blob)
+    downloadFile(buildZipFileName('html', projectName), 'application/zip', blob)
 
     return true
 }

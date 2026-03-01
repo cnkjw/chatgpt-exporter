@@ -3,7 +3,7 @@ import { fetchConversation, getCurrentChatId, processConversation } from '../api
 import { KEY_TIMESTAMP_24H, KEY_TIMESTAMP_ENABLED, KEY_TIMESTAMP_MARKDOWN, baseUrl } from '../constants'
 import i18n from '../i18n'
 import { checkIfConversationStarted } from '../page'
-import { downloadFile, getFileNameWithFormat } from '../utils/download'
+import { buildZipFileName, downloadFile, getFileNameWithFormat } from '../utils/download'
 import { fromMarkdown, toMarkdown } from '../utils/markdown'
 import { ScriptStorage } from '../utils/storage'
 import { standardizeLineBreaks } from '../utils/text'
@@ -28,7 +28,7 @@ export async function exportToMarkdown(fileNameFormat: string, metaList: ExportM
     return true
 }
 
-export async function exportAllToMarkdown(fileNameFormat: string, apiConversations: ApiConversationWithId[], metaList?: ExportMeta[]) {
+export async function exportAllToMarkdown(fileNameFormat: string, apiConversations: ApiConversationWithId[], metaList?: ExportMeta[], projectName?: string) {
     const zip = new JSZip()
     const filenameMap = new Map<string, number>()
     const conversations = apiConversations.map(x => processConversation(x))
@@ -58,7 +58,7 @@ export async function exportAllToMarkdown(fileNameFormat: string, apiConversatio
             level: 9,
         },
     })
-    downloadFile('chatgpt-export-markdown.zip', 'application/zip', blob)
+    downloadFile(buildZipFileName('markdown', projectName), 'application/zip', blob)
 
     return true
 }

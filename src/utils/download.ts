@@ -21,6 +21,20 @@ export function downloadUrl(filename: string, url: string) {
     document.body.removeChild(a)
 }
 
+export function normalizeProjectName(projectName: string) {
+    return projectName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+}
+
+export function buildZipFileName(format: string, projectName?: string) {
+    if (projectName) {
+        return `chatgpt-export-${format}-project-${normalizeProjectName(projectName)}.zip`
+    }
+    return `chatgpt-export-${format}.zip`
+}
+
 export function getFileNameWithFormat(format: string, ext: string, {
     title = document.title,
     // chatId will be empty when exporting all conversations

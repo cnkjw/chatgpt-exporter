@@ -3,8 +3,9 @@ import { fetchConversation, getCurrentChatId, processConversation } from '../api
 import i18n from '../i18n'
 import { checkIfConversationStarted } from '../page'
 import { convertToOoba, convertToTavern } from '../utils/conversion'
-import { downloadFile, getFileNameWithFormat } from '../utils/download'
+import { buildZipFileName, downloadFile, getFileNameWithFormat, normalizeProjectName } from '../utils/download'
 import type { ApiConversationWithId } from '../api'
+import type { ExportMeta } from '../ui/SettingContext'
 
 export async function exportToJson(fileNameFormat: string) {
     if (!checkIfConversationStarted()) {
@@ -60,14 +61,17 @@ export async function exportToOoba(fileNameFormat: string) {
     return true
 }
 
-export async function exportAllToOfficialJson(_fileNameFormat: string, apiConversations: ApiConversationWithId[]) {
+export async function exportAllToOfficialJson(_fileNameFormat: string, apiConversations: ApiConversationWithId[], _metaList?: ExportMeta[], projectName?: string) {
     const content = conversationToJson(apiConversations)
-    downloadFile('chatgpt-export.json', 'application/json', content)
+    const baseName = projectName
+        ? `chatgpt-export-project-${normalizeProjectName(projectName)}`
+        : 'chatgpt-export'
+    downloadFile(`${baseName}.json`, 'application/json', content)
 
     return true
 }
 
-export async function exportAllToJson(fileNameFormat: string, apiConversations: ApiConversationWithId[]) {
+export async function exportAllToJson(fileNameFormat: string, apiConversations: ApiConversationWithId[], _metaList?: ExportMeta[], projectName?: string) {
     const zip = new JSZip()
     const filenameMap = new Map<string, number>()
     const conversations = apiConversations.map(x => ({
@@ -100,7 +104,7 @@ export async function exportAllToJson(fileNameFormat: string, apiConversations: 
             level: 9,
         },
     })
-    downloadFile('chatgpt-export-json.zip', 'application/zip', blob)
+    downloadFile(buildZipFileName('json', projectName), 'application/zip', blob)
 
     return true
 }

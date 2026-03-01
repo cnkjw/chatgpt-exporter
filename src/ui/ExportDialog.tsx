@@ -269,10 +269,10 @@ const DialogContent: FC<DialogContentProps> = ({ format }) => {
         const off = requestQueue.on('done', (results) => {
             setProcessing(false)
             const callback = exportAllOptions.find(o => o.label === exportType)?.callback
-            if (callback) callback(format, results, metaList)
+            if (callback) callback(format, results, metaList, selectedProject?.display.name)
         })
         return () => off()
-    }, [requestQueue, exportAllOptions, exportType, format, metaList])
+    }, [requestQueue, exportAllOptions, exportType, format, metaList, selectedProject])
 
     useEffect(() => {
         const off = archiveQueue.on('done', () => {
@@ -314,7 +314,7 @@ const DialogContent: FC<DialogContentProps> = ({ format }) => {
 
         const results = localConversations.filter(c => selected.some(s => s.id === c.id))
         const callback = exportAllOptions.find(o => o.label === exportType)?.callback
-        if (callback) callback(format, results, metaList)
+        if (callback) callback(format, results, metaList, selectedProject?.display.name)
     }, [
         disabled,
         selected,
@@ -323,6 +323,7 @@ const DialogContent: FC<DialogContentProps> = ({ format }) => {
         exportType,
         format,
         metaList,
+        selectedProject,
     ])
 
     const exportAll = useMemo(() => {
