@@ -35,6 +35,30 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Package Extension
+        run: pnpm run zip
+
+      - name: Get Version
+        id: get_version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Upload Extension Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chatgpt-exporter-v${{ steps.get_version.outputs.VERSION }}
+          path: chatgpt-exporter.zip
+          retention-days: 90
+
+      - name: Publish to Chrome Web Store
+        if: ${{ secrets.CHROME_EXTENSION_ID != '' && secrets.CHROME_CLIENT_ID != '' && secrets.CHROME_CLIENT_SECRET != '' && secrets.CHROME_REFRESH_TOKEN != '' }}
+        uses: mnao305/chrome-extension-upload@v4.0.1
+        with:
+          file-path: chatgpt-exporter.zip
+          extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
+          client-id: ${{ secrets.CHROME_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+
       - name: Git commit
         id: commit
         run: |

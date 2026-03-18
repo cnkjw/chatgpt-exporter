@@ -58,6 +58,51 @@ Files are uploaded to `<WebDAV URL>/chatgpt-export/YYYY-MM-DD/<title>-<id>.md` o
 
 > **Security note:** Your password/token is stored in Chrome's local extension storage and is never synced to the cloud or sent anywhere other than your configured WebDAV server.
 
+## CI/CD – Building and Publishing the Chrome Extension
+
+### How CI Works
+
+This project uses **GitHub Actions** for continuous integration.
+
+| Workflow | Trigger | Steps |
+|---|---|---|
+| **Check** (`.github/workflows/check.yml`) | Every push & PR to `master` | Lint → Type-check → Build → Upload zip artifact |
+| **Release** (`.github/workflows/build.yml`) | Push with commit message containing `chore: release` | Lint → Type-check → Build → Zip → Upload artifact → (optionally) Publish to Chrome Web Store |
+| **release-please** (`.github/workflows/release-please.yml`) | Push to `master` | Automated version bump and changelog via release-please |
+
+After each successful **Check** run the compiled extension zip is available as a **GitHub Actions artifact** (retained for 30 days). After each **Release** run the artifact is retained for 90 days.
+
+### Downloading a Build Artifact
+
+1. Open the repository on GitHub and click the **Actions** tab.
+2. Select a completed **Check** or **Release** workflow run.
+3. Scroll to the **Artifacts** section at the bottom and download `chatgpt-exporter-<sha>` or `chatgpt-exporter-v<version>`.
+4. Unzip the file and load the `dist/` folder in Chrome (see [Load in Chrome](#load-in-chrome) below).
+
+### Publishing to the Chrome Web Store
+
+Automatic publishing is triggered by any **Release** run when all four of the following repository secrets are configured:
+
+| Secret | How to obtain |
+|---|---|
+| `CHROME_EXTENSION_ID` | The extension ID from the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) |
+| `CHROME_CLIENT_ID` | OAuth 2.0 Client ID – create credentials in [Google Cloud Console](https://console.cloud.google.com/) (Chrome Web Store API) |
+| `CHROME_CLIENT_SECRET` | OAuth 2.0 Client Secret for the same credential |
+| `CHROME_REFRESH_TOKEN` | Refresh token obtained via the OAuth flow for the Chrome Web Store API |
+
+> **Note:** If any of the four secrets are absent the publish step is skipped automatically and only the artifact is uploaded.
+
+#### Step-by-step secret setup
+
+1. Go to **Settings → Secrets and variables → Actions** in your GitHub repository.
+2. Click **New repository secret** and add each of the four secrets above.
+3. To generate the OAuth credentials follow the [Chrome Web Store API getting started guide](https://developer.chrome.com/docs/webstore/using-api).
+4. Push a commit whose message includes `chore: release` to trigger the Release workflow (or let `release-please` do it automatically on `master`).
+
+---
+
+
+
 ## Install as UserScript (GreasyFork)
 
 ### Prerequisites

@@ -23,6 +23,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "zip": "cd dist && zip -r ../chatgpt-exporter.zip .",
     "test": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

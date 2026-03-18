@@ -34,3 +34,16 @@ jobs:
 
       - name: Test
         run: pnpm run test
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Package Extension
+        run: pnpm run zip
+
+      - name: Upload Extension Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chatgpt-exporter-${{ github.sha }}
+          path: chatgpt-exporter.zip
+          retention-days: 30
