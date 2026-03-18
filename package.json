@@ -28,6 +28,7 @@
     "lint:fix": "eslint . --fix",
     "prepare": "husky"
   },
+  "extensionName": "chatgpt-exporter",
   "dependencies": {
     "@headlessui/react": "^1.7.14",
     "@radix-ui/react-dialog": "^1.0.3",
@@ -50,14 +51,13 @@
     "react-i18next": "^12.3.1",
     "sanitize-filename": "^1.6.3",
     "sentinel-js": "^0.0.7",
-    "urlcat": "^2.0.4",
-    "vite-plugin-monkey": "^3.5.2"
+    "urlcat": "^2.0.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.6.1",
     "@commitlint/config-conventional": "^18.6.2",
     "@pionxzh/eslint-config": "^1.0.1",
-    "@preact/preset-vite": "^2.8.3",
+    "@types/chrome": "^0.0.296",
     "@types/katex": "^0.16.7",
     "@types/mdast": "^3.0.15",
     "@types/node": "^20.11.20",
@@ -68,7 +68,9 @@
     "lint-staged": "^15.2.7",
     "react": "^18.3.1",
     "typescript": "^5.5.2",
-    "vite": "^5.3.2"
+    "vite": "^5.3.2",
+    "vite-plugin-static-copy": "^3.3.0",
+    "vite-plugin-web-extension": "^4.5.0"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "pnpm exec eslint"

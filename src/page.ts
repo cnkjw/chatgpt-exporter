@@ -1,4 +1,3 @@
-import { unsafeWindow } from 'vite-plugin-monkey/dist/client'
 import { KEY_OAI_HISTORY_DISABLED } from './constants'
 import { getBase64FromImageUrl, getBase64FromImg } from './utils/dom'
 
@@ -81,11 +80,11 @@ export function getHistoryDisabled(): boolean {
 }
 
 export function getPageAccessToken(): string | null {
-    return unsafeWindow?.__remixContext?.state?.loaderData?.root?.clientBootstrap?.session?.accessToken ?? null
+    return window?.__remixContext?.state?.loaderData?.root?.clientBootstrap?.session?.accessToken ?? null
 }
 
 function getUserProfile() {
-    const user = unsafeWindow?.__NEXT_DATA__?.props?.pageProps?.user ?? unsafeWindow?.__remixContext?.state?.loaderData?.root?.clientBootstrap?.session?.user
+    const user = window?.__NEXT_DATA__?.props?.pageProps?.user ?? window?.__remixContext?.state?.loaderData?.root?.clientBootstrap?.session?.user
     if (!user) throw new Error('No user found.')
     return user
 }

@@ -21,3 +21,14 @@ export const KEY_EXPORT_ALL_LIMIT = 'exporter:export_all_limit'
 
 export const KEY_OAI_LOCALE = 'oai/apps/locale'
 export const KEY_OAI_HISTORY_DISABLED = 'oai/apps/historyDisabled'
+
+// Re-export WebDAV constants from the shared module (browser-independent)
+export {
+    ALARM_AUTO_SAVE,
+    KEY_WEBDAV_ENABLED,
+    KEY_WEBDAV_INTERVAL,
+    KEY_WEBDAV_LAST_SAVE,
+    KEY_WEBDAV_PASSWORD,
+    KEY_WEBDAV_URL,
+    KEY_WEBDAV_USERNAME,
+} from './shared/constants'
