@@ -22,3 +22,6 @@ node_modules
 
 tsconfig.tsbuildinfo
 .claude
+
+# Build output
+dist/

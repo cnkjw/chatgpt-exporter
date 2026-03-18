@@ -19,7 +19,46 @@ English &nbsp;&nbsp;|&nbsp;&nbsp; [Français](./README_FR.md) &nbsp;&nbsp;|&nbsp
 
 ![image](https://github.com/pionxzh/chatgpt-exporter/assets/9910706/1c864670-7912-4484-b4be-bdf5dde51557)
 
-## Install
+## Install as Chrome Extension
+
+### Build from source
+
+**Prerequisites:** Node.js ≥ 20, npm
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/cnkjw/chatgpt-exporter.git
+cd chatgpt-exporter
+
+# 2. Install dependencies
+npm install --legacy-peer-deps
+
+# 3. Build the extension
+npm run build
+# The compiled extension will be in the dist/ folder
+```
+
+### Load in Chrome
+
+1. Open Chrome and navigate to `chrome://extensions`
+2. Enable **Developer mode** (toggle in the top-right corner)
+3. Click **Load unpacked** and select the `dist/` folder
+4. The extension icon will appear in your toolbar
+
+### Configure WebDAV Auto-Save
+
+1. Click **Options** on the extension card in `chrome://extensions`, or right-click the extension icon → **Options**
+2. Enter your WebDAV server URL, username and password (or access token)
+3. Choose an auto-save interval (minimum 1 minute)
+4. Enable **Auto-Save** and click **Save Settings**
+5. Use **Test Connection** to verify your credentials before relying on auto-save
+6. Click **Save Now** to trigger an immediate save without waiting for the next interval
+
+Files are uploaded to `<WebDAV URL>/chatgpt-export/YYYY-MM-DD/<title>-<id>.md` on your server.
+
+> **Security note:** Your password/token is stored in Chrome's local extension storage and is never synced to the cloud or sent anywhere other than your configured WebDAV server.
+
+## Install as UserScript (GreasyFork)
 
 ### Prerequisites
 
