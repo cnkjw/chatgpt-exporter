@@ -5,12 +5,15 @@
   "description": "Easily export ChatGPT conversation history and auto-save to WebDAV.",
   "permissions": [
     "storage",
-    "alarms"
+    "alarms",
+    "notifications"
   ],
   "host_permissions": [
     "https://chatgpt.com/*",
     "https://chat.openai.com/*",
-    "https://new.oaifree.com/*",
+    "https://new.oaifree.com/*"
+  ],
+  "optional_host_permissions": [
     "*://*/*"
   ],
   "content_scripts": [

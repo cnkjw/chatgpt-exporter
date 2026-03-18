@@ -22,11 +22,13 @@ export const KEY_EXPORT_ALL_LIMIT = 'exporter:export_all_limit'
 export const KEY_OAI_LOCALE = 'oai/apps/locale'
 export const KEY_OAI_HISTORY_DISABLED = 'oai/apps/historyDisabled'
 
-// WebDAV auto-save settings (stored in chrome.storage.local)
-export const KEY_WEBDAV_URL = 'webdav:url'
-export const KEY_WEBDAV_USERNAME = 'webdav:username'
-export const KEY_WEBDAV_PASSWORD = 'webdav:password'
-export const KEY_WEBDAV_INTERVAL = 'webdav:interval'
-export const KEY_WEBDAV_ENABLED = 'webdav:enabled'
-export const KEY_WEBDAV_LAST_SAVE = 'webdav:last_save'
-export const ALARM_AUTO_SAVE = 'chatgpt-exporter:auto-save'
+// Re-export WebDAV constants from the shared module (browser-independent)
+export {
+    ALARM_AUTO_SAVE,
+    KEY_WEBDAV_ENABLED,
+    KEY_WEBDAV_INTERVAL,
+    KEY_WEBDAV_LAST_SAVE,
+    KEY_WEBDAV_PASSWORD,
+    KEY_WEBDAV_URL,
+    KEY_WEBDAV_USERNAME,
+} from './shared/constants'

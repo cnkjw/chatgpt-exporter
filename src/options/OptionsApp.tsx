@@ -97,6 +97,17 @@ export function OptionsApp() {
         setIsSaving(true)
         setStatus(null)
         try {
+            // Request optional host permission for the WebDAV server before saving
+            if (settings.url) {
+                try {
+                    const origin = new URL(settings.url).origin
+                    await chrome.permissions.request({ origins: [`${origin}/*`] })
+                }
+                catch {
+                    // Non-fatal: the user may have denied or the URL is invalid
+                }
+            }
+
             await saveSettings(settings)
             const resp = await notifyBackground('SETTINGS_UPDATED')
             if (!resp.ok) throw new Error(resp.error ?? 'Unknown error')
@@ -228,7 +239,7 @@ export function OptionsApp() {
                             type="text"
                             placeholder="your-username"
                             style={styles.input}
-                            autocomplete="off"
+                            autoComplete="off"
                             value={settings.username}
                             onInput={e => update('username', (e.target as HTMLInputElement).value)}
                         />
@@ -244,7 +255,7 @@ export function OptionsApp() {
                                 type={showPassword ? 'text' : 'password'}
                                 placeholder="••••••••"
                                 style={{ ...styles.input, flex: 1 }}
-                                autocomplete="new-password"
+                                autoComplete="new-password"
                                 value={settings.password}
                                 onInput={e => update('password', (e.target as HTMLInputElement).value)}
                             />

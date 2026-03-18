@@ -302,7 +302,7 @@ async function runAutoSave(): Promise<void> {
     if (errors.length > 0) {
         console.error('[AutoSave] Errors during save:', errors)
         // Show a notification so the user knows something went wrong
-        chrome.notifications?.create?.('auto-save-error', {
+        chrome.notifications.create('auto-save-error', {
             type: 'basic',
             iconUrl: 'icons/icon48.png',
             title: 'ChatGPT Exporter – Auto-save error',
